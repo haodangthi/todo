@@ -1,0 +1,21 @@
+<form [formGroup]="createTodoForm" (ngSubmit)="onSubmit()" class="example-form">
+  <mat-form-field class="example-full-width">
+    <mat-label>To do</mat-label>
+    <input  matInput   formControlName="title" type="text"  />
+   
+  </mat-form-field>
+ 
+  <button  type="submit" mat-raised-button color="primary" >Add to do</button>
+ 
+</form>
+<!-- <mat-form-field class="example-full-width">
+    <mat-label>To do</mat-label>
+    <input  matInput [(ngModel)]="inputVal" (change)="inputChange()" type="text"  />
+   
+  </mat-form-field>
+  <h1>{{ inputVal }}</h1>
+  <button mat-raised-button color="primary">Add to do</button> -->
+
+<!-- <h1>works</h1>
+<input />
+<h1>{{ inputVal }}</h1> -->
