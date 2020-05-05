@@ -1,9 +1,9 @@
 <mat-card class="todo__item">
-  <mat-checkbox value="completed" [(ngModel)]="completed">
-    <b>{{ index }} </b>{{ title }}
-    <input *ngIf="edit"  type="text" value="title" [(ngModel)]='inputTitle'  />
+  <mat-checkbox value="completed" [(ngModel)]="completed" (change)='check(completed)'>
+    <b>{{ index }} </b>{{ title }} <b>Deadline: </b>{{deadline|date}}
+    
   </mat-checkbox>
-  
+  <input *ngIf="edit"  type="text" value="title" [(ngModel)]='inputTitle'  />
 
   <div class="example-button-container">
     <button mat-raised-button color="accent" (click)='editTitle()'>{{this.edit?'Save':'Edit'}}</button>

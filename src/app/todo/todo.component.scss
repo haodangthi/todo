@@ -1,8 +1,11 @@
-.todo__item{
-    width: 70%;
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin: 5px 10px;
-   
+.todo__item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 5px 0 10px 0;
+}
+
+button {
+  margin-right: 10px;
 }

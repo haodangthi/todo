@@ -1,6 +1,16 @@
 <div class="container">
-
-  <app-create-todo></app-create-todo>
-  <app-todo-list></app-todo-list>
   
+  <div class="sidebar">
+    <app-filter></app-filter>
+  </div>
+  <div class="main">
+    <div class="create-todo__container">
+      <div class="wrapper">
+        <app-create-todo></app-create-todo>
+      </div>
+    </div>
+    <div class="wrapper">
+      <app-todo-list></app-todo-list>
+    </div>
+  </div>
 </div>

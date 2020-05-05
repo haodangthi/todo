@@ -1,0 +1,56 @@
+<div class="filter__container">
+  <mat-card>
+    <mat-form-field>
+        <mat-label>Sort by</mat-label>
+        <mat-select [(ngModel)]="selectedValue" name="todo">
+          <mat-option *ngFor="let todo of todos" [value]="todo.value">
+            {{ todo.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="sort()">
+        Show
+      </button>
+      
+      <mat-form-field>
+        <mat-label>Sort by date of creation</mat-label>
+        <mat-select [(ngModel)]="selectedDate" name="dateSelect">
+          <mat-option
+            *ngFor="let dateSelect of sortByDate"
+            [value]="dateSelect.value"
+          >
+            {{ dateSelect.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Sort by due date</mat-label>
+        <mat-select [(ngModel)]="selectedDeadline" name="deadlineSelect">
+          <mat-option
+            *ngFor="let dateSelect of sortDueDate"
+            [value]="dateSelect.value"
+          >
+            {{ dateSelect.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+     
+      <button mat-raised-button color="primary" (click)="sortDate()">
+        Sort
+      </button>
+      <button mat-raised-button color="primary" (click)="reset()">Reset</button>
+      <mat-form-field class="example-full-width">
+        <mat-label>Search in filtered list</mat-label>
+        <input
+          matInput
+          type="text"
+          #searchFiltered
+          (input)="filterInput(searchFiltered.value)"
+        />
+      </mat-form-field>
+    </mat-card>
+</div>
+
+
