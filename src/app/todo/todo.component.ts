@@ -19,7 +19,7 @@ export class TodoComponent implements OnInit {
   completed:boolean;
   created:any=''
   deadline:any=''
-  //completed$: BehaviorSubject<boolean>=new BahaviorSubject(this.completed)
+  
 
   constructor(private todoService: TodosService) {}
 
@@ -27,13 +27,15 @@ export class TodoComponent implements OnInit {
     this.initTodo(this.todo);
    // this.completed$.subscribe()
   }
-  initTodo(todo) {
+  initTodo(todo:Todo) {
     this.id = todo.id;
     this.userId = todo.userId;
     this.title = todo.title;
     this.completed = todo.completed;
     this.created=todo.created;
     this.deadline=todo.deadline;
+    //Андрей Почему оно не работает
+   //{id:this.id,userId:this.userId ,title:this.title,completed:this.completed,created:this.created,deadline:this.deadline}=todo
   }
   editTitle() {
     this.edit = !this.edit;

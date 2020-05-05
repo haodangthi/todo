@@ -16,124 +16,108 @@ export class TodosService {
     created: null,
     deadline: null,
   };
+
   todos: Todo[] = JSON.parse(localStorage.getItem('todos')) || [];
   todos$: BehaviorSubject<Todo[]> = new BehaviorSubject(this.todos);
-  createdNumber: number = JSON.parse(localStorage.getItem('totalCreated')) || 0
+  createdNumber: number = JSON.parse(localStorage.getItem('totalCreated')) || 1;
   todoUrl = 'https://jsonplaceholder.typicode.com/todos';
+  databaseURL='https://todo-app-9a673.firebaseio.com/todos'
   constructor(private http: HttpClient) {}
+
+create(todo:Todo):Observable<any>{
+  return this.http.post<any>(this.databaseURL+'.json',todo).pipe(res=>{
+    console.log(res);
+    return res
+  })
+}
+loadTodos(){
+  return this.http.get<Todo[]>(this.databaseURL+'.json').pipe(
+    map(res=>Object.keys(res).map(key=>({...res[key],id:key})))
+  )
+}
+
+
+
+  addTodo(todo: Todo) {
+    //todo.id = this.createdNumber;
+    todo.completed = false;
+    todo.userId = 1;
+    
+    this.todos.unshift(todo);
+    
+
+    this.updateTodos(this.todos);
+    this.updateNumberCreated(this.createdNumber++);
+  }
+  deleteTodo(id) {
+    this.todos = this.todos.filter((todo) => todo.id !== id);
+    this.updateTodos(this.todos);
+  }
+  editTodo(title, id) {
+    this.todos.map((todo) => changeValue(todo, id, 'title', title));
+    this.updateTodos(this.todos);
+  }
+  check(id, value) {
+    this.todos.map((todo) => changeValue(todo, id, 'completed', value));
+    this.updateTodos(this.todos);
+  }
+
+  search = (input) =>
+    this.todos$.next(this.todos.filter((todo) => contains(todo, input)));
+
+  searchFiltered = (input) =>
+    this.todos$.next(this.todos$.value.filter((todo) => contains(todo, input)));
+
+  sort = (completed) =>
+    completed == undefined
+      ? true
+      : this.todos$.next(
+          this.todos.filter((todo) => todo.completed === completed)
+        );
+
+  sortByCreated = (recent) =>
+    recent === undefined ? true : this.showAscending(recent, 'created');
+  sortByDeadline = (latest) =>
+    latest === undefined ? true : this.showAscending(latest, 'deadline');
+
+  showAscending(ascending, key) {
+    ascending
+      ? this.todos$.value.sort((todo1, todo2) =>
+          dateDifference(todo2, todo1, key)
+        )
+      : this.todos$.value.sort((todo1, todo2) =>
+          dateDifference(todo1, todo2, key)
+        );
+
+    console.log('sorting');
+    this.todos$.next(this.todos$.value);
+  }
+
+  reset() {
+    this.todos$.next(this.todos);
+  }
   getHttp() {
     let url = this.todoUrl;
     return this.http.get<Todo[]>(url);
   }
 
-  getTodos() {
-    return this.todos$;
-  }
-  emit(res) {
+  updateTodos(res) {
     this.todos$.next(res);
     localStorage.setItem('todos', JSON.stringify(res));
   }
-
-  addTodo(todo: Todo) {
-    todo.id = this.createdNumber + 1;
-    this.createdNumber++;
-    todo.completed = false;
-    todo.userId = 1;
-    todo.created = new Date();
-    this.todos.unshift(todo);
-    // this.todos$.next(this.todos);
-    this.emit(this.todos);
-    localStorage.setItem('totalCreated',JSON.stringify(this.createdNumber))
-  }
-  deleteTodo(id) {
-    this.todos = this.todos.filter((todo) => todo.id !== id);
-    
-    console.log(this.todos);
-    //this.todos$.next(this.todos);
-    this.emit(this.todos);
-  }
-  editTodo(title, id) {
-    this.todos.map((todo) => {
-      if (id === todo.id) {
-        console.log(todo.title);
-        todo.title = title;
-      }
-      return todo;
-    });
-    //this.todos$.next(this.todos);
-    this.emit(this.todos);
-  }
-  check(id, value) {
-    this.todos = this.todos.map((todo) => {
-      if (todo.id === id) {
-        todo.completed = value;
-      }
-      return todo;
-    });
-    this.emit(this.todos);
-    //this.todos$.next(this.todos);
-  }
-
-  search(input) {
-    let filtered = this.todos.filter(
-      (todo) => todo.title.toUpperCase().indexOf(input.toUpperCase()) > -1
-    );
-    console.log(filtered);
-    this.todos$.next(filtered);
-  }
-
-  searchFiltered(input) {
-    this.todos$.next(
-      this.todos$.value.filter(
-        (todo) => todo.title.toUpperCase().indexOf(input.toUpperCase()) > -1
-      )
-    );
-  }
-  sort(completed) {
-    if (completed == undefined) {
-      return;
-    }
-    this.todos$.next(
-      this.todos.filter((todo) => todo.completed === completed)
-    );
-  }
-  sortByCreated(recent) {
-    if (recent == undefined) {
-      return;
-    }
-    this.showAscending(recent, 'created');
-  }
-
-  sortByDeadline(latest) {
-    if (latest == undefined) {
-      return;
-    }
-    this.showAscending(latest, 'deadline');
-  }
-  showAscending(ascending, key) {
-    console.log(Array.isArray(this.todos$.value));
-    if (ascending) {
-      this.todos$.value.sort((todo1, todo2) => {
-        let date1=new Date(todo1[key])
-        let date2=new Date(todo2[key])
-        
-        //return  date2.getDate()- date1.getDate();
-        return date2.getTime()- date1.getTime()
-      });
-      console.log('sorted', this.todos$.value);
-    } else {
-      this.todos$.value.sort((todo1, todo2) => {
-        let date1=new Date(todo1[key])
-        let date2=new Date(todo2[key])
-        
-        //return  date1.getDate()- date2.getDate();
-        return date1.getTime()- date2.getTime()
-      });
-      console.log('sorted2', this.todos$.value);
-    }
-    this.todos$.next(this.todos$.value);
-  }
-  reset() {
-    this.todos$.next(this.todos);
-  }
+  updateNumberCreated = (createdNumber) =>
+    localStorage.setItem('totalCreated', JSON.stringify(createdNumber));
 }
+
+const getDate = (todo, key) => new Date(todo[key]).getTime();
+const dateDifference = (todo1, todo2, key) =>
+  getDate(todo1, key) - getDate(todo2, key);
+const contains = (todo, input) =>
+  todo.title.toUpperCase().indexOf(input.toUpperCase()) > -1;
+
+const changeValue = (item, id, key, value) => {
+  if (item.id === id) {
+    item[key] = value;
+    return item;
+  }
+};
