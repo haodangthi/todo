@@ -16,17 +16,13 @@ export class TodosService {
     created: null,
     deadline: null,
   };
-
-  //todos: Todo[] = JSON.parse(localStorage.getItem('todos')) || [];
   todos: Todo[] = []
   todos$: BehaviorSubject<Todo[]> = new BehaviorSubject(this.todos);
-  //createdNumber: number = JSON.parse(localStorage.getItem('totalCreated')) || 1;
-  todoUrl = 'https://jsonplaceholder.typicode.com/todos';
+  //todoUrl = 'https://jsonplaceholder.typicode.com/todos';
   databaseURL = 'https://todo-app-9a673.firebaseio.com/todos'
   constructor(private http: HttpClient) { }
 
   create(todo: Todo): Observable<any> {
-
     return this.http.post<any>(this.databaseURL + '.json', todo).pipe(res => {
       console.log(res);
       return res
@@ -45,8 +41,6 @@ export class TodosService {
     )
   }
   addTodo(todo: Todo) {
-
-   
     todo.completed = false;
     todo.userId = 1;
     this.todos.unshift(todo);
@@ -95,18 +89,14 @@ export class TodosService {
       : this.todos$.value.sort((todo1, todo2) =>
         dateDifference(todo1, todo2, key)
       );
-
-    console.log('sorting');
     this.todos$.next(this.todos$.value);
   }
 
-  reset() {
-    this.todos$.next(this.todos);
-  }
+  reset=()=> this.todos$.next(this.todos);
+  
 
-  updateTodos(res) {
-    this.todos$.next(res);
-  }
+  updateTodos=(res) =>this.todos$.next(res);
+  
  
 }
 

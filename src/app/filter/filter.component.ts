@@ -11,7 +11,6 @@ export class FilterComponent implements OnInit {
   selectedValue: boolean;
   selectedDate: boolean;
   selectedDeadline: boolean;
-
   searchFiltered$ = new Subject();
   sort$ = new Subject();
   sortByDate$ = new Subject();
@@ -36,34 +35,30 @@ export class FilterComponent implements OnInit {
   ]
 
   ngOnInit(): void {
-    this.sort$.subscribe((value) => {
-      this.todoService.sort(value);
-    });
-    this.sortByDate$.subscribe((value) => {
-      this.todoService.sortByCreated(value);
-    });
-    this.sortByDeadline$.subscribe((value) => {
-      this.todoService.sortByDeadline(value);
-    });
+    this.sort$.subscribe((value) =>
+      this.todoService.sort(value)
+    );
+    this.sortByDate$.subscribe((value) =>
+      this.todoService.sortByCreated(value)
+    );
+    this.sortByDeadline$.subscribe((value) =>
+      this.todoService.sortByDeadline(value)
+    );
     this.searchFiltered$.subscribe((value) =>
       this.todoService.searchFiltered(value)
     );
   }
-  filterInput(value) {
-    this.searchFiltered$.next(value);
-  }
+  filterInput = (value) =>
+    this.searchFiltered$.next(value)
 
-  sort() {
-    this.sort$.next(this.selectedValue);
 
-  }
+  sort = () => this.sort$.next(this.selectedValue);
   sortDate() {
     this.sortByDate$.next(this.selectedDate);
     this.sortByDeadline$.next(this.selectedDeadline)
+ }
 
-  }
-
-  reset() {
+  reset = () =>
     this.todoService.reset();
-  }
+
 }
