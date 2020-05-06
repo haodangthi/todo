@@ -14,7 +14,7 @@ export class CreateTodoComponent implements OnInit {
   todoLength = this.todoService.todos$.value.length;
   search$ = new Subject();
 
-  constructor(private todoService: TodosService) {}
+  constructor(private todoService: TodosService) { }
 
   ngOnInit(): void {
     this.createTodoForm = new FormGroup({
@@ -27,19 +27,16 @@ export class CreateTodoComponent implements OnInit {
     });
 
     this.search$.subscribe((input) => {
-      console.log('input stream', input);
       this.todoService.search(input);
     });
-    
+
   }
   onSubmit() {
     let val = this.createTodoForm.value;
     val.created = new Date();
-    console.log('date', this.createTodoForm.value.deadline);
     this.createTodoForm.reset();
-    this.todoService.create(val).subscribe(res=>{console.log(res);val.id=res.name;this.todoService.addTodo(val)},error=>console.error(error))
-    console.log('adding',val)
-    //return val.title.trim() ? this.todoService.addTodo(val) : false;
+    this.todoService.create(val).subscribe(res => { console.log(res); val.id = res.name; this.todoService.addTodo(val) }, error => console.error(error))
+
   }
 
   input(value) {

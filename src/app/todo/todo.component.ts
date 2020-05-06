@@ -25,7 +25,6 @@ export class TodoComponent implements OnInit {
 
   ngOnInit(): void {
     this.initTodo(this.todo);
-   // this.completed$.subscribe()
   }
   initTodo(todo:Todo) {
     this.id = todo.id;
@@ -52,7 +51,6 @@ export class TodoComponent implements OnInit {
   }
   deleteTodo() {
     console.log(this.id)
-    //this.todoService.deleteTodo(this.id);
     this.todoService.delete(this.id).subscribe()
   }
   check(value) {

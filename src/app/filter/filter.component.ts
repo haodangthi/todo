@@ -10,14 +10,14 @@ import { TodosService } from '../todos.service';
 export class FilterComponent implements OnInit {
   selectedValue: boolean;
   selectedDate: boolean;
-  selectedDeadline:boolean;
+  selectedDeadline: boolean;
 
   searchFiltered$ = new Subject();
   sort$ = new Subject();
   sortByDate$ = new Subject();
   sortByDeadline$ = new Subject();
 
-  constructor(private todoService: TodosService) {}
+  constructor(private todoService: TodosService) { }
 
   todos = [
     { value: true, viewValue: 'Completed' },
@@ -29,7 +29,7 @@ export class FilterComponent implements OnInit {
     { value: false, viewValue: 'Older first' },
     { value: null, viewValue: 'All' }
   ];
-  sortDueDate=[
+  sortDueDate = [
     { value: false, viewValue: 'Earliest deadline' },
     { value: true, viewValue: 'Latest deadline' },
     { value: null, viewValue: 'All' }
@@ -37,15 +37,12 @@ export class FilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.sort$.subscribe((value) => {
-      console.log('select stream', value);
       this.todoService.sort(value);
     });
     this.sortByDate$.subscribe((value) => {
-      console.log('date stream', value);
       this.todoService.sortByCreated(value);
     });
     this.sortByDeadline$.subscribe((value) => {
-      console.log('deadline stream', value);
       this.todoService.sortByDeadline(value);
     });
     this.searchFiltered$.subscribe((value) =>
@@ -58,13 +55,13 @@ export class FilterComponent implements OnInit {
 
   sort() {
     this.sort$.next(this.selectedValue);
-   
-  }
- sortDate(){
-  this.sortByDate$.next(this.selectedDate);
-  this.sortByDeadline$.next(this.selectedDeadline)
 
- }
+  }
+  sortDate() {
+    this.sortByDate$.next(this.selectedDate);
+    this.sortByDeadline$.next(this.selectedDeadline)
+
+  }
 
   reset() {
     this.todoService.reset();

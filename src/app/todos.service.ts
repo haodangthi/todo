@@ -18,59 +18,55 @@ export class TodosService {
   };
 
   //todos: Todo[] = JSON.parse(localStorage.getItem('todos')) || [];
-  todos: Todo[]=[]
+  todos: Todo[] = []
   todos$: BehaviorSubject<Todo[]> = new BehaviorSubject(this.todos);
   //createdNumber: number = JSON.parse(localStorage.getItem('totalCreated')) || 1;
   todoUrl = 'https://jsonplaceholder.typicode.com/todos';
-  databaseURL='https://todo-app-9a673.firebaseio.com/todos'
-  constructor(private http: HttpClient) {}
+  databaseURL = 'https://todo-app-9a673.firebaseio.com/todos'
+  constructor(private http: HttpClient) { }
 
-create(todo:Todo):Observable<any>{
-  
-  return this.http.post<any>(this.databaseURL+'.json',todo).pipe(res=>{
-    console.log(res);
-    return res
-  })
-}
-delete(id){
-  this.deleteTodo(id)
-  return this.http.delete<void>(`${this.databaseURL}/${id}.json`)
-}
-loadTodos(){
-  return this.http.get<Todo[]>(this.databaseURL+'.json').pipe(
-    map(res=>{
-      return res?Object.keys(res).map(key=>({...res[key],id:key})):[]
-    }),
-    map((res:Todo[])=>{this.todos$.next(res);return res})
-  )
-}
+  create(todo: Todo): Observable<any> {
 
-
-
+    return this.http.post<any>(this.databaseURL + '.json', todo).pipe(res => {
+      console.log(res);
+      return res
+    })
+  }
+  delete(id) {
+    this.deleteTodo(id)
+    return this.http.delete<void>(`${this.databaseURL}/${id}.json`)
+  }
+  loadTodos() {
+    return this.http.get<Todo[]>(this.databaseURL + '.json').pipe(
+      map(res => {
+        return res ? Object.keys(res).map(key => ({ ...res[key], id: key })) : []
+      }),
+      map((res: Todo[]) => { this.todos$.next(res); return res })
+    )
+  }
   addTodo(todo: Todo) {
-    
-    console.log('new',todo.id)
+
+   
     todo.completed = false;
     todo.userId = 1;
     this.todos.unshift(todo);
     this.updateTodos(this.todos);
-    console.log('service todos added new',this.todos)
-    //this.updateNumberCreated(this.createdNumber++);
+   
   }
   deleteTodo(id) {
     this.todos = this.todos.filter((todo) => todo.id !== id);
     this.updateTodos(this.todos);
-    console.log('service todos',this.todos)
+    
   }
-  editTodo(todo,title, id) {
+  editTodo(todo, title, id) {
     this.todos.map((todo) => changeValue(todo, id, 'title', title));
     this.updateTodos(this.todos);
-    return this.http.put(`${this.databaseURL}/${id}.json`,{...todo,title})
+    return this.http.put(`${this.databaseURL}/${id}.json`, { ...todo, title })
   }
-  check(todo,id, completed) {
+  check(todo, id, completed) {
     this.todos.map((todo) => changeValue(todo, id, 'completed', completed));
     this.updateTodos(this.todos);
-    return this.http.put(`${this.databaseURL}/${todo.id}.json`,{...todo,completed})
+    return this.http.put(`${this.databaseURL}/${todo.id}.json`, { ...todo, completed })
   }
 
   search = (input) =>
@@ -83,8 +79,8 @@ loadTodos(){
     completed == null
       ? true
       : this.todos$.next(
-          this.todos.filter((todo) => todo.completed === completed)
-        );
+        this.todos.filter((todo) => todo.completed === completed)
+      );
 
   sortByCreated = (recent) =>
     recent === null ? true : this.showAscending(recent, 'created');
@@ -94,11 +90,11 @@ loadTodos(){
   showAscending(ascending, key) {
     ascending
       ? this.todos$.value.sort((todo1, todo2) =>
-          dateDifference(todo2, todo1, key)
-        )
+        dateDifference(todo2, todo1, key)
+      )
       : this.todos$.value.sort((todo1, todo2) =>
-          dateDifference(todo1, todo2, key)
-        );
+        dateDifference(todo1, todo2, key)
+      );
 
     console.log('sorting');
     this.todos$.next(this.todos$.value);
@@ -107,17 +103,11 @@ loadTodos(){
   reset() {
     this.todos$.next(this.todos);
   }
-  // getHttp() {
-  //   let url = this.todoUrl;
-  //   return this.http.get<Todo[]>(url);
-  // }
 
   updateTodos(res) {
     this.todos$.next(res);
-    //localStorage.setItem('todos', JSON.stringify(res));
   }
-  updateNumberCreated = (createdNumber) =>
-    localStorage.setItem('totalCreated', JSON.stringify(createdNumber));
+ 
 }
 
 const getDate = (todo, key) => new Date(todo[key]).getTime();
@@ -127,10 +117,9 @@ const contains = (todo, input) =>
   todo.title.toUpperCase().indexOf(input.toUpperCase()) > -1;
 
 const changeValue = (item, id, key, value) => {
-  console.log(id,item.id)
+  console.log(id, item.id)
 
   if (item.id === id) {
     item[key] = value;
-    
-  }return item;
+   } return item;
 };
