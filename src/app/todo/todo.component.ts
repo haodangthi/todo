@@ -42,17 +42,18 @@ export class TodoComponent implements OnInit {
     return this.edit ? true : this.saveTitle();
   }
   saveTitle() {
-    this.todoService.editTodo(this.inputTitle, this.id)
-    this.todoService.todos$.subscribe(res=>
-      res.map(todo=>{
-        if(todo.id===this.id){
-          this.title=todo.title
-        }
-      }))
+    this.todoService.editTodo(this.todo,this.inputTitle, this.id).subscribe()
+    // this.todoService.todos$.subscribe(res=>
+    //   res.map(todo=>{
+    //     if(todo.id===this.id){
+    //       this.title=todo.title
+    //     }
+    //   }))
   }
   deleteTodo() {
     console.log(this.id)
-    this.todoService.deleteTodo(this.id);
+    //this.todoService.deleteTodo(this.id);
+    this.todoService.delete(this.id).subscribe()
   }
   check(value) {
     console.log(this.id);

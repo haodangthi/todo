@@ -17,7 +17,8 @@ export class TodosService {
     deadline: null,
   };
 
-  todos: Todo[] = JSON.parse(localStorage.getItem('todos')) || [];
+  //todos: Todo[] = JSON.parse(localStorage.getItem('todos')) || [];
+  todos: Todo[]=[]
   todos$: BehaviorSubject<Todo[]> = new BehaviorSubject(this.todos);
   createdNumber: number = JSON.parse(localStorage.getItem('totalCreated')) || 1;
   todoUrl = 'https://jsonplaceholder.typicode.com/todos';
@@ -30,9 +31,15 @@ create(todo:Todo):Observable<any>{
     return res
   })
 }
+delete(id){
+  return this.http.delete<void>(`${this.databaseURL}/${id}.json`)
+}
 loadTodos(){
   return this.http.get<Todo[]>(this.databaseURL+'.json').pipe(
-    map(res=>Object.keys(res).map(key=>({...res[key],id:key})))
+    map(res=>{
+      return res?Object.keys(res).map(key=>({...res[key],id:key})):[]
+    }),
+    switchMap((res:Todo[])=>{this.todos$.next(res);return this.todos$.asObservable()})
   )
 }
 
@@ -53,9 +60,11 @@ loadTodos(){
     this.todos = this.todos.filter((todo) => todo.id !== id);
     this.updateTodos(this.todos);
   }
-  editTodo(title, id) {
-    this.todos.map((todo) => changeValue(todo, id, 'title', title));
-    this.updateTodos(this.todos);
+  editTodo(todo,title, id) {
+    // this.todos.map((todo) => changeValue(todo, id, 'title', title));
+    // this.updateTodos(this.todos);
+  
+    return this.http.put(`${this.databaseURL}/${id}.json`,{...todo,title})
   }
   check(id, value) {
     this.todos.map((todo) => changeValue(todo, id, 'completed', value));

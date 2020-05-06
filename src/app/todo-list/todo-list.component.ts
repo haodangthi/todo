@@ -17,7 +17,13 @@ export class TodoListComponent implements OnInit {
     //   console.log('list todos', this.todos);
       
     // });
-    this.todoService.loadTodos().subscribe(res=> this.todos = res)
+
+    this.todoService.loadTodos().subscribe((res:Todo[])=> {
+      
+      this.todos = res
+      console.log(this.todos)
+    })
+    
 
     
   }
