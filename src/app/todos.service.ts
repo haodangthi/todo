@@ -23,10 +23,7 @@ export class TodosService {
   constructor(private http: HttpClient) { }
 
   create(todo: Todo): Observable<any> {
-    return this.http.post<any>(this.databaseURL + '.json', todo).pipe(res => {
-      console.log(res);
-      return res
-    })
+    return this.http.post<any>(this.databaseURL + '.json', todo)
   }
   delete(id) {
     this.deleteTodo(id)
@@ -41,11 +38,8 @@ export class TodosService {
     )
   }
   addTodo(todo: Todo) {
-    todo.completed = false;
-    todo.userId = 1;
     this.todos.unshift(todo);
     this.updateTodos(this.todos);
-   
   }
   deleteTodo(id) {
     this.todos = this.todos.filter((todo) => todo.id !== id);
@@ -93,11 +87,8 @@ export class TodosService {
   }
 
   reset=()=> this.todos$.next(this.todos);
-  
-
   updateTodos=(res) =>this.todos$.next(res);
   
- 
 }
 
 const getDate = (todo, key) => new Date(todo[key]).getTime();

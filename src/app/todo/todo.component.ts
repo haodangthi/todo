@@ -12,48 +12,45 @@ export class TodoComponent implements OnInit {
   @Input() index: number;
   edit: boolean = false;
   inputTitle: string;
-
   id: number;
   userId: number;
   title: string;
-  completed:boolean;
-  created:any=''
-  deadline:any=''
-  
+  completed: boolean;
+  created: any = ''
+  deadline: any = ''
 
-  constructor(private todoService: TodosService) {}
+  constructor(private todoService: TodosService) { }
 
   ngOnInit(): void {
     this.initTodo(this.todo);
   }
-  initTodo(todo:Todo) {
+  initTodo(todo: Todo) {
     this.id = todo.id;
     this.userId = todo.userId;
     this.title = todo.title;
     this.completed = todo.completed;
-    this.created=todo.created;
-    this.deadline=todo.deadline;
+    this.created = todo.created;
+    this.deadline = todo.deadline;
     //Андрей Почему оно не работает
-   //{id:this.id,userId:this.userId ,title:this.title,completed:this.completed,created:this.created,deadline:this.deadline}=todo
+    //{id:this.id,userId:this.userId ,title:this.title,completed:this.completed,created:this.created,deadline:this.deadline}=todo
   }
   editTitle() {
     this.edit = !this.edit;
     return this.edit ? true : this.saveTitle();
   }
   saveTitle() {
-    this.todoService.editTodo(this.todo,this.inputTitle, this.id).subscribe()
-    this.todoService.todos$.subscribe(res=>
-      res.map(todo=>{
-        if(todo.id===this.id){
-          this.title=todo.title
+    this.todoService.editTodo(this.todo, this.inputTitle, this.id).subscribe()
+    this.todoService.todos$.subscribe(res =>
+      res.map(todo => {
+        if (todo.id === this.id) {
+          this.title = todo.title
         }
       }))
   }
-  deleteTodo() {
-    console.log(this.id)
+  deleteTodo = () =>
     this.todoService.delete(this.id).subscribe()
-  }
-  check(value) {
-    this.todoService.check(this.todo,this.id,value).subscribe();
-  }
+
+  check = (value) =>
+    this.todoService.check(this.todo, this.id, value).subscribe();
+
 }
