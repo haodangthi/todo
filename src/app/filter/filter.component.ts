@@ -22,17 +22,17 @@ export class FilterComponent implements OnInit {
   todos = [
     { value: true, viewValue: 'Completed' },
     { value: false, viewValue: 'Not Completed' },
-    { value: undefined, viewValue: 'All' }
+    { value: null, viewValue: 'All' }
   ];
   sortByDate = [
     { value: true, viewValue: 'Recent first' },
     { value: false, viewValue: 'Older first' },
-    { value: undefined, viewValue: 'All' }
+    { value: null, viewValue: 'All' }
   ];
   sortDueDate=[
     { value: false, viewValue: 'Earliest deadline' },
     { value: true, viewValue: 'Latest deadline' },
-    { value: undefined, viewValue: 'All' }
+    { value: null, viewValue: 'All' }
   ]
 
   ngOnInit(): void {

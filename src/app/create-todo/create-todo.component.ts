@@ -32,13 +32,14 @@ export class CreateTodoComponent implements OnInit {
     });
     
   }
-  async onSubmit() {
+  onSubmit() {
     let val = this.createTodoForm.value;
     val.created = new Date();
     console.log('date', this.createTodoForm.value.deadline);
     this.createTodoForm.reset();
-    await this.todoService.create(val).subscribe(res=>{console.log(res);val.id=res.name},error=>console.error(error))
-    return val.title.trim() ? this.todoService.addTodo(val) : false;
+    this.todoService.create(val).subscribe(res=>{console.log(res);val.id=res.name;this.todoService.addTodo(val)},error=>console.error(error))
+    console.log('adding',val)
+    //return val.title.trim() ? this.todoService.addTodo(val) : false;
   }
 
   input(value) {
