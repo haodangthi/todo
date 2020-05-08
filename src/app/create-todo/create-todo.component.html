@@ -16,7 +16,7 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
-    <button type="submit" mat-raised-button color="primary">Add to do</button>
+    <button type="submit" [disabled]="!(createTodoForm.get('title').valid && createTodoForm.get('deadline').valid) " mat-raised-button color="primary">Add todo</button>
   </form>
 
   <mat-form-field class="example-full-width">

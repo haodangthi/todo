@@ -1,15 +1,34 @@
 <mat-card class="todo__item">
-  <mat-checkbox value="completed" [(ngModel)]="completed" (change)='check(completed)'>
-    <b>{{ index }} </b>{{ title }} <b>Deadline: </b>{{deadline|date}}
-    
+  <mat-checkbox
+    value="completed"
+    [(ngModel)]="completed"
+    (change)="check(completed)"
+  >
+    <b>{{ index }} </b>{{ title }} <b>Deadline: </b>{{ deadline | date }}
   </mat-checkbox>
-  <input *ngIf="edit"  type="text" value="title" [(ngModel)]='inputTitle'  />
+
+  <input
+    *ngIf="edit"
+    type="text"
+    [value]="title"
+    [(ngModel)]="inputTitle"
+    required
+  />
 
   <div class="example-button-container">
-    <button mat-raised-button color="accent" (click)='editTitle()'>{{this.edit?'Save':'Edit'}}</button>
-    <button (click)='deleteTodo()'mat-mini-fab color="primary" aria-label="delete icon">
+    <button  *ngIf='this.edit'  [disabled]='!inputTitle' mat-raised-button color="accent" (click)="editTitle()">
+     Save
+    </button>
+    <button *ngIf='!this.edit' mat-raised-button color="accent" (click)="editTitle()">
+      Edit
+    </button>
+    <button
+      (click)="deleteTodo()"
+      mat-mini-fab
+      color="primary"
+      aria-label="delete icon"
+    >
       <mat-icon>delete</mat-icon>
     </button>
   </div>
-
 </mat-card>

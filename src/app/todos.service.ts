@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Todo } from './todo';
-import { Subject, BehaviorSubject } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import {  BehaviorSubject,Subject } from 'rxjs';
+import { map,tap,debounceTime} from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
@@ -17,13 +17,16 @@ export class TodosService {
     deadline: null,
   };
   todos: Todo[] = []
+  loading$:Subject<boolean>=new Subject();
   todos$: BehaviorSubject<Todo[]> = new BehaviorSubject(this.todos);
   //todoUrl = 'https://jsonplaceholder.typicode.com/todos';
   databaseURL = 'https://todo-app-9a673.firebaseio.com/todos'
   constructor(private http: HttpClient) { }
 
   create(todo: Todo): Observable<any> {
-    return this.http.post<any>(this.databaseURL + '.json', todo)
+    this.loading$.next(true)
+    return  this.http.post<any>(this.databaseURL + '.json', todo).pipe(
+      )
   }
   delete(id) {
     this.deleteTodo(id)

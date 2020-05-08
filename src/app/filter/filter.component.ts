@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { Component, OnInit,  OnDestroy } from '@angular/core';
+import { Subject} from 'rxjs';
 import { TodosService } from '../todos.service';
 
 @Component({
@@ -7,7 +7,7 @@ import { TodosService } from '../todos.service';
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
 })
-export class FilterComponent implements OnInit {
+export class FilterComponent implements OnInit,OnDestroy {
   selectedValue: boolean;
   selectedDate: boolean;
   selectedDeadline: boolean;
@@ -48,6 +48,15 @@ export class FilterComponent implements OnInit {
       this.todoService.searchFiltered(value)
     );
   }
+  ngOnDestroy(){
+    this.sort$.unsubscribe()
+    this.sortByDate$.unsubscribe()
+    this.sortByDeadline$.unsubscribe()
+    this.searchFiltered$.unsubscribe()
+
+  }
+
+  
   filterInput = (value) =>
     this.searchFiltered$.next(value)
 
